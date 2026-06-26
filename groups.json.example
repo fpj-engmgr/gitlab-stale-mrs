@@ -1,0 +1,28 @@
+{
+  "groups": [
+    {
+      "id": "team-backend",
+      "name": "Backend Team",
+      "path": "yourorg/backend",
+      "type": "group",
+      "description": "Backend services and APIs",
+      "enabled": true
+    },
+    {
+      "id": "team-frontend",
+      "name": "Frontend Team",
+      "path": "yourorg/frontend",
+      "type": "group",
+      "description": "Frontend applications",
+      "enabled": true
+    },
+    {
+      "id": "docs-project",
+      "name": "Documentation",
+      "path": "yourorg/team/documentation",
+      "type": "project",
+      "description": "Team documentation project",
+      "enabled": true
+    }
+  ]
+}

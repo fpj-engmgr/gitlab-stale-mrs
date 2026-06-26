@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitLab Stale MRs Tracker</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚨 Stale Merge Requests Tracker</h1>
+            <p>Track and manage merge requests that need attention</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <label for="groupFilter">Group:</label>
+            <select id="groupFilter">
+                <option value="">All Groups</option>
+            </select>
+
+            <label for="staleDays">Stale Threshold:</label>
+            <select id="staleDays">
+                <option value="3">3 Days</option>
+                <option value="5">5 Days</option>
+                <option value="7" selected>7 Days</option>
+                <option value="10">10 Days</option>
+                <option value="14">14 Days</option>
+                <option value="21">21 Days</option>
+                <option value="30">30 Days</option>
+            </select>
+
+            <button id="refreshBtn">Refresh Data</button>
+            <button id="darkModeToggle" class="theme-toggle" title="Toggle dark mode">🌙</button>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>Total Open MRs</h3>
+                <div class="value" id="total-open">-</div>
+                <div class="label">Currently Open</div>
+            </div>
+            <div class="metric-card stale-card">
+                <h3>Stale MRs</h3>
+                <div class="value" id="stale-count">-</div>
+                <div class="label" id="stale-label">Need Attention</div>
+            </div>
+            <div class="metric-card">
+                <h3>Stale Percentage</h3>
+                <div class="value" id="stale-percentage">-</div>
+                <div class="label">% of Open MRs</div>
+            </div>
+            <div class="metric-card">
+                <h3>Last Updated</h3>
+                <div class="value" id="last-updated">-</div>
+                <div class="label">Cache Age</div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <h2>⚠️ Stale Merge Requests - Require Action</h2>
+            <p class="stale-help-text" id="help-text">
+                These MRs have been open for more than <span id="threshold-display">7</span> days.
+                Color coding: 🟡 Moderate (7-14d) | 🟠 High (15-30d) | 🔴 Critical (>30d)
+            </p>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="sortable" data-column="title">Title <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="project">Project <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="author">Author <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="days_open" data-sort="desc">Days Open <span class="sort-indicator"></span></th>
+                        <th class="sortable" data-column="created">Created <span class="sort-indicator"></span></th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="staleMRsTableBody">
+                    <tr><td colspan="6" class="loading">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
