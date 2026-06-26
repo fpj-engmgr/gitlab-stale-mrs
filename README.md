@@ -13,6 +13,7 @@ A focused, lightweight dashboard for tracking and managing **stale merge request
 - **📊 Key Metrics**: Total open MRs, stale count, stale percentage
 - **🔍 Multi-Group Support**: Track multiple GitLab groups/projects
 - **📑 Sortable Table**: Sort by title, project, author, days open, or created date
+- **📥 CSV Export**: Download current view as CSV for offline analysis or sharing
 - **🌙 Dark Mode**: Toggle between light and dark themes
 - **💾 Smart Caching**: Fast loads with configurable cache duration
 - **🔄 Manual Refresh**: Update data on demand
@@ -132,6 +133,7 @@ The dashboard shows:
    - **Group Filter**: View all groups or filter to specific group
    - **Stale Threshold**: Choose from 3, 5, 7, 10, 14, 21, or 30 days
    - **Refresh Data**: Manually update from GitLab
+   - **📥 Export CSV**: Download current filtered view as CSV
    - **Dark Mode Toggle**: Switch between light/dark themes
 
 3. **Stale MRs Table**
@@ -147,7 +149,32 @@ The dashboard shows:
 2. **Triage**: Click through critical (red) and high (orange) MRs
 3. **Take Action**: Review, merge, or close each stale MR
 4. **Track Progress**: Watch stale count decrease as you clear backlog
-5. **Adjust Threshold**: If too noisy, increase to 10-14 days
+5. **Export Report**: Click "📥 Export CSV" to share with team or analyze offline
+6. **Adjust Threshold**: If too noisy, increase to 10-14 days
+
+### Exporting Data
+
+The **📥 Export CSV** button downloads a CSV file containing all currently displayed stale MRs.
+
+**Features:**
+- Respects current filters (stale threshold and group selection)
+- Smart filename includes filters and timestamp
+  - Example: `stale_mrs_7d_backend_20260626_143022.csv`
+- Contains all key data: title, project, author, days open, created date, severity, URL
+- Perfect for:
+  - Sharing reports with stakeholders
+  - Offline analysis in Excel/Google Sheets
+  - Creating action items or tickets
+  - Archiving snapshots of stale MR status
+
+**CSV Columns:**
+- `title` - MR title
+- `project_name` - Which project the MR is in
+- `author` - Who created the MR
+- `days_open` - How many days it's been open
+- `created_at` - When the MR was created (ISO format)
+- `severity` - moderate, high, or critical
+- `web_url` - Direct link to the MR in GitLab
 
 ### Customizing Stale Threshold
 
@@ -195,7 +222,8 @@ The threshold determines when an MR is considered "stale":
 
 - `GET /` - Main dashboard
 - `GET /api/groups` - List configured groups
-- `GET /api/stale-mrs?stale_days=7&group_id=backend` - Get stale MRs
+- `GET /api/stale-mrs?stale_days=7&group_id=backend` - Get stale MRs (JSON)
+- `GET /api/export-csv?stale_days=7&group_id=backend` - Export stale MRs as CSV
 - `POST /api/refresh` - Force refresh from GitLab
 - `GET /health` - Health check
 
@@ -250,6 +278,7 @@ This project is derived from [gitlab-dashboard](https://github.com/fpj-engmgr/gi
 | Feature | Stale MRs Tracker | Full Dashboard |
 |---------|-------------------|----------------|
 | Stale MR detection | ✅ **Primary focus** | ✅ One of many metrics |
+| CSV export | ✅ | ✅ |
 | MR metrics (total, merged, time-to-merge) | ❌ | ✅ |
 | Contributor stats | ❌ | ✅ |
 | Comment/review metrics | ❌ | ✅ |
