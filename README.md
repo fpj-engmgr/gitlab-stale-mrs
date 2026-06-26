@@ -62,6 +62,7 @@ GITLAB_GROUP=yourorg/yourgroup
 # Optional (with defaults):
 STALE_MR_DAYS=7
 CACHE_DURATION_HOURS=1
+PORT=8001
 ```
 
 **Get a GitLab Personal Access Token:**
