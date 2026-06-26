@@ -222,6 +222,12 @@ async function refreshData() {
     }
 }
 
+function exportToCSV() {
+    const groupParam = currentGroup ? `&group_id=${currentGroup}` : '';
+    const url = `/api/export-csv?stale_days=${currentStaleDays}${groupParam}`;
+    window.location.href = url;
+}
+
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -259,6 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchStaleMRs();
 
     document.getElementById('refreshBtn').addEventListener('click', refreshData);
+    document.getElementById('exportBtn').addEventListener('click', exportToCSV);
     document.getElementById('staleDays').addEventListener('change', changeStaleDays);
     document.getElementById('groupFilter').addEventListener('change', changeGroup);
     document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);

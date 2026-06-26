@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import Optional
+import csv
+from io import StringIO
+from datetime import datetime
 from app.models.database import get_db
 from app.services.stale_service import StaleService
 
@@ -33,6 +37,45 @@ async def get_stale_mrs(
     """
     service = StaleService(db, group_id=group_id)
     return service.get_stale_mrs(stale_days=stale_days)
+
+
+@router.get("/api/export-csv")
+async def export_stale_mrs_csv(
+    stale_days: Optional[int] = None,
+    group_id: Optional[str] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Export stale MRs to CSV file.
+
+    Parameters:
+    - stale_days: Number of days to consider an MR stale (default from settings)
+    - group_id: Optional filter by group
+    """
+    service = StaleService(db, group_id=group_id)
+    data = service.get_stale_mrs(stale_days=stale_days)
+
+    # Create CSV in memory
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=[
+        'title', 'project_name', 'author', 'days_open',
+        'created_at', 'severity', 'web_url'
+    ])
+    writer.writeheader()
+    writer.writerows(data['stale_mrs'])
+
+    # Generate filename with timestamp and filters
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    group_suffix = f"_{group_id}" if group_id else "_all_groups"
+    filename = f"stale_mrs_{stale_days or data['stale_threshold_days']}d{group_suffix}_{timestamp}.csv"
+
+    # Return as downloadable CSV
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename={filename}"}
+    )
 
 
 @router.post("/api/refresh")
