@@ -5,4 +5,5 @@
 source venv/bin/activate
 
 # Start the server
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# Port is configurable via PORT env var, defaults to 8001 (set in .env)
+uvicorn app.main:app --reload --host 0.0.0.0 --port ${PORT:-8001}

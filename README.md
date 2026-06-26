@@ -111,7 +111,9 @@ If `groups.json` doesn't exist, uses single-group mode with `GITLAB_GROUP` from 
 uvicorn app.main:app --reload
 ```
 
-Open browser: [http://localhost:8000](http://localhost:8000)
+Open browser: [http://localhost:8001](http://localhost:8001)
+
+**Note:** Runs on port 8001 by default (configurable via `PORT` in `.env`) so you can run it alongside the full GitLab Dashboard (port 8000).
 
 ## Usage
 
@@ -169,6 +171,7 @@ The threshold determines when an MR is considered "stale":
 | `DATABASE_URL` | `sqlite:///./stale_mrs.db` | Database connection string |
 | `CACHE_DURATION_HOURS` | `1` | How long to cache data (1 hour recommended for stale tracking) |
 | `STALE_MR_DAYS` | `7` | Default threshold for stale MRs (overridable in UI) |
+| `PORT` | `8001` | Port to run server on (8001 avoids conflict with main dashboard) |
 
 ### Multi-Group Configuration (groups.json)
 

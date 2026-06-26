@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     cache_duration_hours: int = 1  # Shorter cache for stale MR tracking
     stale_mr_days: int = 7  # Default threshold for stale MRs
     groups_file: str = "groups.json"
+    port: int = 8001  # Default port (different from main dashboard's 8000)
 
     class Config:
         env_file = ".env"
