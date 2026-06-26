@@ -58,10 +58,14 @@ async def export_stale_mrs_csv(
 
         # Create CSV in memory
         output = StringIO()
-        writer = csv.DictWriter(output, fieldnames=[
-            'title', 'project_name', 'author', 'days_open',
-            'created_at', 'severity', 'web_url'
-        ])
+        writer = csv.DictWriter(
+            output,
+            fieldnames=[
+                'title', 'project_name', 'author', 'days_open',
+                'created_at', 'severity', 'web_url'
+            ],
+            extrasaction='ignore'  # Ignore extra fields like project_id, mr_id, group_id
+        )
         writer.writeheader()
         writer.writerows(data['stale_mrs'])
     except Exception as e:
