@@ -52,17 +52,23 @@ async def export_stale_mrs_csv(
     - stale_days: Number of days to consider an MR stale (default from settings)
     - group_id: Optional filter by group
     """
-    service = StaleService(db, group_id=group_id)
-    data = service.get_stale_mrs(stale_days=stale_days)
+    try:
+        service = StaleService(db, group_id=group_id)
+        data = service.get_stale_mrs(stale_days=stale_days)
 
-    # Create CSV in memory
-    output = StringIO()
-    writer = csv.DictWriter(output, fieldnames=[
-        'title', 'project_name', 'author', 'days_open',
-        'created_at', 'severity', 'web_url'
-    ])
-    writer.writeheader()
-    writer.writerows(data['stale_mrs'])
+        # Create CSV in memory
+        output = StringIO()
+        writer = csv.DictWriter(output, fieldnames=[
+            'title', 'project_name', 'author', 'days_open',
+            'created_at', 'severity', 'web_url'
+        ])
+        writer.writeheader()
+        writer.writerows(data['stale_mrs'])
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error exporting CSV: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to export CSV: {str(e)}")
 
     # Generate filename with timestamp and filters
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
